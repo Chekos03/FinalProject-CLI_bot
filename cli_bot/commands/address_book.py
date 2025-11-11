@@ -41,7 +41,7 @@ class Record:
     def add_phone(self, phone):
         try:
             self.phones.append(Phone(phone))
-            return "Телефон додано"
+            return "Телефон додано."
         except ValueError as e:
             return f"Невірний номер: {e}"
     
@@ -49,15 +49,15 @@ class Record:
         for p in self.phones:
             if p.value == phone:
                 self.phones.remove(p)
-                return f"Телефон {phone} видалено"
-        return f"Телефон {phone} не знайдено"
+                return f"Телефон {phone} видалено."
+        return f"Телефон {phone} не знайдено."
     
     def edit_phone(self,old_phone, new_phone):
         for p in self.phones:
             if p.value == old_phone:
                 p.value = new_phone
-                return f'Старий номер : {old_phone} був змінений на {new_phone}'
-        return 'Телефон не знайдено'
+                return f'Старий номер : {old_phone} був змінений на {new_phone}.'
+        return 'Телефон не знайдено.'
     
     def find_phone(self, phone):
         for p in self.phones:
@@ -70,12 +70,12 @@ class Record:
             return f"У контакту '{self.name.value}' вже вказано день народження: {self.birthday}"
         try:
             self.birthday = Birthday(birthday)
-            return "Дату народження додано"
+            return "Дату народження додано."
         except ValueError as er:
             return f"Не вірний формат дати {er}"
     
     def __str__(self):
-        phones = '; '.join(phone.value for phone in self.phones) if self.phones else "No phones yet"
+        phones = '; '.join(phone.value for phone in self.phones) if self.phones else "Телефонів ще немає."
         birthday = f', birthday: {self.birthday}' if self.birthday else ""
         return f"Контакт: {self.name.value}, телефон: {phones}{birthday}"
     
@@ -86,7 +86,7 @@ class Birthday(Field):
             birthday_date = datetime.strptime(value, "%d.%m.%Y").date()
             super().__init__(birthday_date)
         except ValueError:
-            raise ValueError("Невірний формат дати. Використовуй DD.MM.YYYY")
+            raise ValueError("Невірний формат дати. Використовуйте DD.MM.YYYY")
     def __str__(self):
         return self.value.strftime("%d.%m.%Y")
 
@@ -101,8 +101,8 @@ class AddressBook(UserDict):
     def delete(self, name):
         if name in self.data:
             del self.data[name]
-            return f"Запис {name} видалено"
-        return f"{name} не знайдено"
+            return f"Запис {name} видалено."
+        return f"{name} не знайдено."
     
     def get_upcomming_birthdays(self):
         today = date.today()

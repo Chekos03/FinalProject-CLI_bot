@@ -6,9 +6,9 @@ def input_error(func):
         try:
             return func(*args, **kwargs)
         except ValueError:
-            return "Give me name and phone please."
+            return "Прошу ввести ім'я та телефон."
         except KeyError:
-            return "Enter user name or contact not found"
+            return "Введіть ім'я користувача або контакт не знайдено."
         except IndexError:
-            return "Give me name please"
+            return "Прошу ввести ім'я."
     return inner

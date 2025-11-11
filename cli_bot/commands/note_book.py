@@ -20,14 +20,14 @@ class Note:
 class NoteBook(UserDict):
     def add(self, note : Note):
         self.data[note.title.lower()] = note
-        return f"Нотатку '{note.title}' додано "
+        return f"Нотатку '{note.title}' додано."
     
     def edit(self,title,new_text):
         note = self.data.get(title.lower())
         if not note:
-            return f"Нотатку '{title}' не знайдено"
+            return f"Нотатку '{title}' не знайдено."
         note.text = new_text
-        return f"Нотатку '{title}' оновлено"
+        return f"Нотатку '{title}' оновлено."
     
     def find(self, query: str):
         results = [
@@ -39,8 +39,8 @@ class NoteBook(UserDict):
     def delete(self,title):
         if title.lower() in self.data:
             del self.data[title.lower()]
-            return f"Нотатка {title} видалено"
-        return f"{title} не знайдено"
+            return f"Нотатка {title} видалено."
+        return f"{title} не знайдено."
 
 
 
