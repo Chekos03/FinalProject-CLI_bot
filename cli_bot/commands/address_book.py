@@ -113,12 +113,12 @@ class AddressBook(UserDict):
             if record.birthday:
                 birthday_this_year = record.birthday.value.replace(year = today.year)
 
-            if birthday_this_year < today:
-                birthday_this_year = birthday_this_year.replace(year=today.year+1)
+                if birthday_this_year < today:
+                    birthday_this_year = birthday_this_year.replace(year=today.year + 1)
 
-            if today <= birthday_this_year <= next_week:
-                upcoming.append({
-                    "name": record.name.value,
-                    "birthday": birthday_this_year.strftime("%d.%m.%Y")
-                })
+                if today <= birthday_this_year <= next_week:
+                    upcoming.append({
+                        "name": record.name.value,
+                        "birthday": birthday_this_year.strftime("%d.%m.%Y")
+                    })
         return upcoming
