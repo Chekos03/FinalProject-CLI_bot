@@ -28,9 +28,9 @@ def change_contact(args, book):
     name, old_phone, new_phone = args[0], args[1], args[2]
     record = book.find(name)
     if not record:
-        return 'Контакту не було знайдно'
+        return 'Контакту не було знайдено.'
     record_result = record.edit_phone(old_phone, new_phone)
-    return f"Контакт змінено {record_result}"
+    return f"Контакт змінено {record_result}."
 
 @input_error
 def show_phone(args, book):
@@ -39,8 +39,8 @@ def show_phone(args, book):
     name = args[0]
     record = book.find(name)
     if not record:
-        return 'Контакту не було знайдно'
-    return f'Контакт знайдено {record}'
+        return 'Контакту не було знайдено.'
+    return f'Контакт знайдено {record}.'
 
 @input_error
 def show_all(book):
@@ -56,7 +56,7 @@ def add_birthday(args, book):
     name, birth_date = args[0], args[1]
     record = book.find(name)
     if not record:
-        return 'Контакту не було знайдно'
+        return 'Контакту не було знайдно.'
     return record.add_birthday(birth_date)
 
 @input_error
@@ -66,15 +66,15 @@ def show_birthday(args,book):
     name = args[0]
     record = book.find(name)
     if not record:
-        return 'Контакту не існує'
+        return 'Контакту не існує.'
     if not record.birthday:
-        return 'Не контакті не вказано день народження'
+        return 'Не контакті не вказано день народження.'
     return f"{name}: {record.birthday}"
 
 @input_error
 def birthdays(book):
     upcoming = book.get_upcomming_birthdays()
     if not upcoming:
-        return "No upcoming birthdays this week."
+        return "На цьому тижні немає днів народження."
     return "\n".join(f"{b['name']} → {b['birthday']}" for b in upcoming)
 
