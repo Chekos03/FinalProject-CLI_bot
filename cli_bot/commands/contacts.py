@@ -135,6 +135,14 @@ def add_email(args, book):
         return f"Email {email} вже використовується контактом '{owner.name.value}'."
     return record.add_email(email)
 
+
+@input_error
+def delete_contact(args, book):
+    if len(args) < 1:
+        return "Помилка: команда 'delete' очікує 1 аргумент: delete <ім'я>."
+    name = args[0]
+    return book.delete(name)
+
 @input_error
 def birthdays(book):
     upcoming = book.get_upcomming_birthdays()

@@ -36,6 +36,10 @@ HELP_TEXT = """\
       Приклад: add-email John john@example.com
       Результат: Email додано.
 
+  delete <name>
+      Приклад: delete John
+      Результат: Видаляє контакт з адресної книги.
+
   show-birthday <name>
       Приклад: show-birthday John
       Результат: <DD.MM.YYYY> Або: День народження не збережено.
