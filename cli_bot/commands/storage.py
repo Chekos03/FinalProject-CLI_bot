@@ -9,13 +9,13 @@ DATA_CONTACT_FILE = os.path.join(DATA_DIR, "addressbook.pkl")
 DATA_NOTE_FILE = os.path.join(DATA_DIR, "notes.pkl")
 
 
-def save_data(book, note, contact_filename=DATA_CONTACT_FILE, note_filename=DATA_NOTE_FILE):
+def save_data(book, notes, contact_filename=DATA_CONTACT_FILE, note_filename=DATA_NOTE_FILE):
     try:
         os.makedirs(os.path.dirname(contact_filename), exist_ok=True)
         with open(contact_filename, "wb") as f:
             pickle.dump(book, f)
         with open(note_filename, "wb") as f:
-            pickle.dump(note, f)
+            pickle.dump(notes, f)
         print(f"[INFO] Дані збережено у файлах: {contact_filename}, {note_filename}")
     except Exception as e:
         print(f"[ERROR] Помилка збереження даних: {e}")
@@ -31,12 +31,12 @@ def load_data(contact_filename=DATA_CONTACT_FILE, note_filename=DATA_NOTE_FILE):
                 book = pickle.load(f)
         if not os.path.exists(note_filename):
             print("[INFO] Файл нотаток не знайдено, створено новий.")
-            note = NoteBook ()
+            notes = NoteBook ()
         else:
             with open (note_filename, "rb") as f:
-                note = pickle.load(f)
+                notes = pickle.load(f)
         print(f"[INFO] Дані завантажено з файлів: {contact_filename}, {note_filename}")
-        return book, note
+        return book, notes
     except Exception as e:
         print (f"[ERROR] Помилка завантаження даних: {e}")
         return AddressBook(), NoteBook()
