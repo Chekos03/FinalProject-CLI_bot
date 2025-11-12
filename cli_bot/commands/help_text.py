@@ -36,6 +36,10 @@ HELP_TEXT = """\
       Приклад: add-email John john@example.com
       Результат: Email додано.
 
+  email <email>
+      Приклад: email john@example.com
+      Результат: Показує контакт, що відповідає email
+
   delete <name>
       Приклад: delete John
       Результат: Видаляє контакт з адресної книги.

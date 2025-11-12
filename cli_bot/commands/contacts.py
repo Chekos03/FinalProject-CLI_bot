@@ -143,6 +143,17 @@ def delete_contact(args, book):
     name = args[0]
     return book.delete(name)
 
+
+@input_error
+def find_by_email(args, book):
+    if len(args) < 1:
+        return "Помилка: команда 'email' очікує 1 аргумент: email <адреса>."
+    email = args[0]
+    record = book.find_record_by_email(email)
+    if not record:
+        return f"Контакт з email {email} не знайдено."
+    return f'Контакт знайдено {record}.'
+
 @input_error
 def birthdays(book):
     upcoming = book.get_upcomming_birthdays()
