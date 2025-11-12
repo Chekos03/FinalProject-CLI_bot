@@ -2,8 +2,10 @@ from commands import (
     add_contact, change_contact, show_phone, show_all,
     add_birthday, show_birthday, birthdays,
     add_note, show_notes, find_note, edit_note, delete_note,
+    add_tags_to_note, find_note_by_tags, sort_notes_by_tags,
     parse_input, save_data, load_data, NoteBook, help_text
 )
+
 from difflib import get_close_matches
 
 ERROR_MSG = "Команда не існує. Введіть 'help' для ознайомлення."
@@ -25,6 +27,9 @@ COMMANDS = (
     "help",
     "close",
     "exit",
+    "add-tags", 
+    "find-by-tag",
+    "sort-notes-by-tag"
 )
 
 
@@ -61,6 +66,12 @@ def execute_command(command: str, args: list[str], book, notes):
         return delete_note(args, notes)
     elif command == "show-notes":
         return show_notes(notes)
+    elif command == "add-tags":
+        return add_tags_to_note(args, notes)
+    elif command == "find-by-tag":
+        return find_note_by_tags(args, notes)
+    elif command == "sort-notes-by-tag":
+        return sort_notes_by_tags(notes)
     elif command == "help":
         return help_text()
     else:
