@@ -103,6 +103,16 @@ class Record:
             return "Email додано."
         except ValueError as er:
             return f"Невірний email: {er}"
+
+    def edit_email(self, old_email: str, new_email: str):
+        for idx, email in enumerate(self.emails):
+            if email.value == old_email:
+                try:
+                    self.emails[idx] = Email(new_email)
+                    return f"Email {old_email} змінено на {new_email}."
+                except ValueError as er:
+                    return f"Невірний email: {er}"
+        return f"Email {old_email} не знайдено."
     
     def __str__(self):
         phones = '\n\tтелефони: ' + '; '.join(phone.value for phone in self.phones) if self.phones else "Телефонів ще немає."

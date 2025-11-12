@@ -7,9 +7,14 @@ HELP_TEXT = """\
       Приклад: add John 1234567890
       Результат: Контакт було додано/оновлено.
 
-  change <name> <old_phone> <new_phone>
-      Приклад: change John 1234567890 0987654321
-      Результат: Номер телефону оновлено. Або: Старий номер телефону не знайдено.
+  change <name> name|phone|address|birthday|email [old] <new>
+      Приклади:
+          change John name Johnny
+          change John phone 1234567890 0987654321
+          change John address Kyiv Lesi Ukrainky 12
+          change John birthday 01.01.1990
+          change John email old@example.com new@example.com
+      Результат: Оновлення вибраного поля контакту (для phone/email потрібно вказати старе значення).
 
   phone <name>
       Приклад: phone John
