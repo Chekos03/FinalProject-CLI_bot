@@ -73,8 +73,11 @@ class Record:
     def edit_phone(self,old_phone, new_phone):
         for p in self.phones:
             if p.value == old_phone:
-                p.value = new_phone
-                return f'Старий номер : {old_phone} був змінений на {new_phone}.'
+                try:
+                    p.value = new_phone
+                    return f'Старий номер : {old_phone} був змінений на {new_phone}.'
+                except ValueError as er:
+                    return f"Невірний номер: {er}"
         return 'Телефон не знайдено.'
     
     def find_phone(self, phone):
@@ -86,15 +89,30 @@ class Record:
     def add_birthday(self,birthday:str):
         if self.birthday is not None:
             return f"У контакту '{self.name.value}' вже вказано день народження: {self.birthday}"
+        return self._set_birthday(birthday, "Дату народження додано.")
+
+    def change_birthday(self, birthday: str):
+        return self._set_birthday(birthday, "Дату народження оновлено.")
+
+    def _set_birthday(self, birthday: str, success_message: str):
         try:
             self.birthday = Birthday(birthday)
-            return "Дату народження додано."
+            return success_message
         except ValueError as er:
             return f"Не вірний формат дати {er}"
-    
+
     def add_address(self, address: str):
-        self.address = Address(address)
-        return "Адресу додано."
+        return self._set_address(address, "Адресу додано.")
+
+    def change_address(self, address: str):
+        return self._set_address(address, "Адресу оновлено.")
+
+    def _set_address(self, address: str, success_message: str):
+        normalized = " ".join(address.split())
+        if not normalized:
+            return "Будь ласка, введіть адресу."
+        self.address = Address(normalized)
+        return success_message
 
     def add_email(self, email: str):
         try:
@@ -103,6 +121,20 @@ class Record:
             return "Email додано."
         except ValueError as er:
             return f"Невірний email: {er}"
+
+    def change_name(self, book, new_name: str):
+        new_name = new_name.strip()
+        if not new_name:
+            return "Нове ім'я не може бути порожнім."
+        current_name = self.name.value
+        if new_name == current_name:
+            return "Нове ім'я збігається з поточним."
+        if book.find(new_name):
+            return f"Контакт з ім'ям '{new_name}' вже існує."
+        del book.data[current_name]
+        self.name = Name(new_name)
+        book.add_record(self)
+        return f"Ім'я контакту змінено на {new_name}."
 
     def edit_email(self, old_email: str, new_email: str):
         for idx, email in enumerate(self.emails):

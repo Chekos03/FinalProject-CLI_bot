@@ -1,5 +1,5 @@
 from .decorator import input_error
-from .address_book import Record, Birthday, Name
+from .address_book import Record
 
 @input_error
 def add_contact(args, book):
@@ -33,66 +33,33 @@ def change_contact(args, book):
     if not record:
         return 'Контакту не було знайдено.'
 
-    handlers = {
-        "name": _change_name,
-        "phone": _change_phone,
-        "email": _change_email,
-        "address": _change_address,
-        "birthday": _change_birthday,
-    }
+    if subcommand == "name":
+        if not params:
+            return "Формат: change <ім'я> name <нове_ім'я>."
+        return record.change_name(book, params[0])
 
-    handler = handlers.get(subcommand)
-    if not handler:
+    if subcommand == "phone":
+        if len(params) < 2:
+            return "Формат: change <ім'я> phone <старий_номер> <новий_номер>."
+        return record.edit_phone(params[0], params[1])
+
+    if subcommand == "email":
+        if len(params) < 2:
+            return "Формат: change <ім'я> email <старий_email> <новий_email>."
+        return record.edit_email(params[0], params[1])
+
+    if subcommand == "address":
+        if not params:
+            return "Будь ласка, введіть нову адресу."
+        return record.change_address(" ".join(params))
+
+    if subcommand == "birthday":
+        if not params:
+            return "Формат: change <ім'я> birthday <DD.MM.YYYY>."
+        return record.change_birthday(params[0])
+
+    else:
         return "Невідома підкоманда. Доступні: name, phone, address, birthday, email."
-
-    return handler(book, record, params, name)
-
-
-def _change_name(book, record, params, original_name):
-    if not params:
-        return "Формат: change <ім'я> name <нове_ім'я>."
-    new_name = params[0]
-    current_name = record.name.value
-    if new_name == current_name:
-        return "Нове ім'я збігається з поточним."
-    if book.find(new_name):
-        return f"Контакт з ім'ям '{new_name}' вже існує."
-    del book.data[current_name]
-    record.name = Name(new_name)
-    book.add_record(record)
-    return f"Ім'я контакту змінено на {new_name}."
-
-
-def _change_phone(_book, record, params, _original_name):
-    if len(params) < 2:
-        return "Формат: change <ім'я> phone <старий_номер> <новий_номер>."
-    old_phone, new_phone = params[0], params[1]
-    return record.edit_phone(old_phone, new_phone)
-
-
-def _change_email(_book, record, params, _original_name):
-    if len(params) < 2:
-        return "Формат: change <ім'я> email <старий_email> <новий_email>."
-    old_email, new_email = params[0], params[1]
-    return record.edit_email(old_email, new_email)
-
-
-def _change_address(_book, record, params, _original_name):
-    new_address = " ".join(params).strip()
-    if not new_address:
-        return "Будь ласка, введіть нову адресу."
-    return record.add_address(new_address)
-
-
-def _change_birthday(_book, record, params, _original_name):
-    if not params:
-        return "Формат: change <ім'я> birthday <DD.MM.YYYY>."
-    new_birthday = params[0]
-    try:
-        record.birthday = Birthday(new_birthday)
-        return "Дату народження оновлено."
-    except ValueError as er:
-        return f"Не вірний формат дати {er}"
 
 @input_error
 def show_phone(args, book):
