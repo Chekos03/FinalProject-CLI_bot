@@ -38,7 +38,11 @@ HELP_TEXT = """\
 
   email <email>
       Приклад: email john@example.com
-      Результат: Показує контакт, що відповідає email
+      Результат: Показує контакт, що відповідає email.
+
+  name <name>
+      Приклад: name John
+      Результат: Показує контакт з вказаним ім'ям.
 
   delete <name>
       Приклад: delete John

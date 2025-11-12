@@ -154,6 +154,17 @@ def find_by_email(args, book):
         return f"Контакт з email {email} не знайдено."
     return f'Контакт знайдено {record}.'
 
+
+@input_error
+def find_by_name(args, book):
+    if len(args) < 1:
+        return "Помилка: команда 'name' очікує 1 аргумент: name <ім'я>."
+    name = args[0]
+    record = book.find(name)
+    if not record:
+        return f"Контакт з ім'ям {name} не знайдено."
+    return f'Контакт знайдено {record}.'
+
 @input_error
 def birthdays(book):
     upcoming = book.get_upcomming_birthdays()
