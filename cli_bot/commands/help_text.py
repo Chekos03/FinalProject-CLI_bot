@@ -23,6 +23,10 @@ HELP_TEXT = """\
       Приклад: add-birthday John 17.08.1980
       Результат: День народження було додано/оновлено.
 
+  add-address <name> <address>
+      Приклад: add-address John Kyiv, Lesi Ukrainky 12
+      Результат: Адресу збережено для контакту.
+
   show-birthday <name>
       Приклад: show-birthday John
       Результат: <DD.MM.YYYY> Або: День народження не збережено.

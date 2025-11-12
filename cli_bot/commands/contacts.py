@@ -72,9 +72,19 @@ def show_birthday(args,book):
     return f"{name}: {record.birthday}"
 
 @input_error
+def add_address(args, book):
+    if len(args) < 2:
+        return "Помилка: команда 'add-address' очікує 2 аргументи: add-address <ім'я> <адреса>."
+    name = args[0]
+    address = " ".join(args[1:])
+    record = book.find(name)
+    if not record:
+        return 'Контакту не було знайдно.'
+    return record.add_address(address)
+
+@input_error
 def birthdays(book):
     upcoming = book.get_upcomming_birthdays()
     if not upcoming:
         return "На цьому тижні немає днів народження."
     return "\n".join(f"{b['name']} → {b['birthday']}" for b in upcoming)
-

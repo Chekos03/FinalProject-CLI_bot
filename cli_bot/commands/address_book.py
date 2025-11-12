@@ -13,6 +13,11 @@ class Name(Field):
         super().__init__(name)
 
 
+class Address(Field):
+    def __init__(self, address):
+        super().__init__(address)
+
+
 class Phone(Field):
     def __init__(self, phone):
         self.value = phone
@@ -37,6 +42,7 @@ class Record:
         self.name = Name(name)
         self.phones : list[Phone] = []
         self.birthday : Birthday = None
+        self.address : Address = None
         
     def add_phone(self, phone):
         try:
@@ -74,10 +80,15 @@ class Record:
         except ValueError as er:
             return f"Не вірний формат дати {er}"
     
+    def add_address(self, address: str):
+        self.address = Address(address)
+        return "Адресу додано."
+    
     def __str__(self):
         phones = '; '.join(phone.value for phone in self.phones) if self.phones else "Телефонів ще немає."
-        birthday = f', birthday: {self.birthday}' if self.birthday else ""
-        return f"Контакт: {self.name.value}, телефон: {phones}{birthday}"
+        birthday = f', день народження: {self.birthday}' if self.birthday else ""
+        address = f', адреса: {self.address}' if self.address else ""
+        return f"Контакт: {self.name.value}, телефон: {phones}{birthday}{address}"
     
     
 class Birthday(Field):

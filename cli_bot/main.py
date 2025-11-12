@@ -1,6 +1,6 @@
 from commands import (
     add_contact, change_contact, show_phone, show_all,
-    add_birthday, show_birthday, birthdays,
+    add_birthday, show_birthday, birthdays, add_address,
     add_note, show_notes, find_note, edit_note, delete_note,
     parse_input, save_data, load_data, NoteBook, help_text
 )
@@ -15,6 +15,7 @@ COMMANDS = (
     "phone",
     "all",
     "add-birthday",
+    "add-address",
     "show-birthday",
     "birthdays",
     "add-note",
@@ -51,6 +52,8 @@ def execute_command(command: str, args: list[str], book, notes):
         return show_birthday(args, book)
     elif command == "birthdays":
         return birthdays(book)
+    elif command == "add-address":
+        return add_address(args, book)
     elif command == "add-note":
         return add_note(args, notes)
     elif command == "find-note":
