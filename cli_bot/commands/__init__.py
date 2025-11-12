@@ -1,4 +1,4 @@
-from .contacts import add_contact,change_contact,show_phone,show_all,add_birthday,show_birthday, birthdays
+from .contacts import add_contact,change_contact,show_phone,show_all,add_birthday,show_birthday, birthdays, add_address, add_email, delete_contact, find_by_email, find_by_name
 from .parser import parse_input
 from .decorator import input_error
 from .address_book import AddressBook, Record
@@ -9,4 +9,4 @@ from .help_text import help_text
 
 __all__ = ['add_contact', 'change_contact','show_phone', 'show_all', 'parse_input' , 'input_error', 'AddressBook', 'Record', 
         'add_birthday','show_birthday', 'birthdays', 'save_data','load_data', 'NoteBook', 'add_note', 'find_note','show_notes',
-        'edit_note','delete_note', 'help_text', 'add_tags_to_note','find_note_by_tags','sort_notes_by_tags']
+        'edit_note','delete_note', 'help_text', 'add_tags_to_note','find_note_by_tags','sort_notes_by_tags','add_address','add_email' ,'delete_contact','find_by_email','find_by_name']

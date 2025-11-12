@@ -1,5 +1,6 @@
 from collections import UserDict 
 from datetime import datetime,timedelta,date
+import re
 
 class Field:
     def __init__(self, value):
@@ -11,6 +12,21 @@ class Field:
 class Name(Field):
     def __init__(self, name):
         super().__init__(name)
+
+
+class Address(Field):
+    def __init__(self, address):
+        super().__init__(address)
+
+
+class Email(Field):
+    EMAIL_PATTERN = re.compile(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
+
+    def __init__(self, email: str):
+        email = email.strip()
+        if not self.EMAIL_PATTERN.match(email):
+            raise ValueError("Некоректна адреса електронної пошти.")
+        super().__init__(email)
 
 
 class Phone(Field):
@@ -37,9 +53,13 @@ class Record:
         self.name = Name(name)
         self.phones : list[Phone] = []
         self.birthday : Birthday = None
-        
+        self.address : Address = None
+        self.emails : list[Email] = []
+
     def add_phone(self, phone):
         try:
+            if self.find_phone(phone):
+                return "Такий номер вже існує у цьому контакті."
             self.phones.append(Phone(phone))
             return "Телефон додано."
         except ValueError as e:
@@ -55,8 +75,13 @@ class Record:
     def edit_phone(self,old_phone, new_phone):
         for p in self.phones:
             if p.value == old_phone:
-                p.value = new_phone
-                return f'Старий номер : {old_phone} був змінений на {new_phone}.'
+                if any(existing.value == new_phone and existing.value != old_phone for existing in self.phones):
+                    return f"Номер {new_phone} вже існує у цьому контакті."
+                try:
+                    p.value = new_phone
+                    return f'Старий номер : {old_phone} був змінений на {new_phone}.'
+                except ValueError as er:
+                    return f"Невірний номер: {er}"
         return 'Телефон не знайдено.'
     
     def find_phone(self, phone):
@@ -64,20 +89,89 @@ class Record:
             if p.value == phone:
                 return p
         return None
+
+    def find_email(self, email: str):
+        target = email.strip().casefold()
+        for em in self.emails:
+            if em.value.casefold() == target:
+                return em
+        return None
     
     def add_birthday(self,birthday:str):
         if self.birthday is not None:
             return f"У контакту '{self.name.value}' вже вказано день народження: {self.birthday}"
+        return self._set_birthday(birthday, "Дату народження додано.")
+
+    def change_birthday(self, birthday: str):
+        return self._set_birthday(birthday, "Дату народження оновлено.")
+
+    def _set_birthday(self, birthday: str, success_message: str):
         try:
             self.birthday = Birthday(birthday)
-            return "Дату народження додано."
+            return success_message
         except ValueError as er:
             return f"Не вірний формат дати {er}"
+
+    def add_address(self, address: str):
+        return self._set_address(address, "Адресу додано.")
+
+    def change_address(self, address: str):
+        return self._set_address(address, "Адресу оновлено.")
+
+    def _set_address(self, address: str, success_message: str):
+        normalized = " ".join(address.split())
+        if not normalized:
+            return "Будь ласка, введіть адресу."
+        self.address = Address(normalized)
+        return success_message
+
+    def add_email(self, email: str):
+        if self.find_email(email):
+            return "Такий email вже існує у цьому контакті."
+        try:
+            email_obj = Email(email)
+            self.emails.append(email_obj)
+            return "Email додано."
+        except ValueError as er:
+            return f"Невірний email: {er}"
+
+    def change_name(self, book, new_name: str):
+        new_name = new_name.strip()
+        if not new_name:
+            return "Нове ім'я не може бути порожнім."
+        current_name = self.name.value
+        if new_name == current_name:
+            return "Нове ім'я збігається з поточним."
+        if book.find(new_name):
+            return f"Контакт з ім'ям '{new_name}' вже існує."
+        del book.data[current_name]
+        self.name = Name(new_name)
+        book.add_record(self)
+        return f"Ім'я контакту змінено на {new_name}."
+
+    def edit_email(self, old_email: str, new_email: str):
+        normalized_old = old_email.strip().casefold()
+        normalized_new = new_email.strip().casefold()
+        for idx, email in enumerate(self.emails):
+            if email.value.casefold() == normalized_old:
+                if any(
+                    existing.value.casefold() == normalized_new and i != idx
+                    for i, existing in enumerate(self.emails)
+                ):
+                    return f"Email {new_email} вже існує у цьому контакті."
+                try:
+                    self.emails[idx] = Email(new_email)
+                    return f"Email {old_email} змінено на {new_email}."
+                except ValueError as er:
+                    return f"Невірний email: {er}"
+        return f"Email {old_email} не знайдено."
     
     def __str__(self):
-        phones = '; '.join(phone.value for phone in self.phones) if self.phones else "Телефонів ще немає."
-        birthday = f', birthday: {self.birthday}' if self.birthday else ""
-        return f"Контакт: {self.name.value}, телефон: {phones}{birthday}"
+        phones = '\n\tтелефони: ' + '; '.join(phone.value for phone in self.phones) if self.phones else "Телефонів ще немає."
+        birthday = f'\n\tдень народження: {self.birthday}' if self.birthday else ""
+        address = f'\n\tадреса: {self.address}' if self.address else ""
+        emails = f"\n\tімейли: {'; '.join(email.value for email in self.emails)}" if self.emails else ""
+        return f"Контакт: {self.name.value}{phones}{birthday}{address}{emails}"
     
     
 class Birthday(Field):
@@ -97,6 +191,20 @@ class AddressBook(UserDict):
     
     def find(self, name):
         return self.data.get(name)
+
+    def find_record_by_phone(self, phone: str):
+        for record in self.data.values():
+            if record.find_phone(phone):
+                return record
+        return None
+
+    def find_record_by_email(self, email: str):
+        target = email.strip().casefold()
+        for record in self.data.values():
+            for em in record.emails:
+                if em.value.casefold() == target:
+                    return record
+        return None
     
     def delete(self, name):
         if name in self.data:

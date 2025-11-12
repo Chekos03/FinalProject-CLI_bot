@@ -7,13 +7,18 @@ HELP_TEXT = """\
       Приклад: add John 1234567890
       Результат: Контакт було додано/оновлено.
 
-  change <name> <old_phone> <new_phone>
-      Приклад: change John 1234567890 0987654321
-      Результат: Номер телефону оновлено. Або: Старий номер телефону не знайдено.
+  change <name> name|phone|address|birthday|email [old] <new>
+      Приклади:
+          change John name Johnny
+          change John phone 1234567890 0987654321
+          change John address Kyiv Lesi Ukrainky 12
+          change John birthday 01.01.1990
+          change John email old@example.com new@example.com
+      Результат: Оновлення вибраного поля контакту (для phone/email потрібно вказати старе значення).
 
-  phone <name>
-      Приклад: phone John
-      Результат: <phones> Або: Контакт не знайдено.
+  phone <phone>
+      Приклад: phone 1234567890
+      Результат: Показує контакт, який містить цей номер телефону.
 
   all
       Результат: Усі контакти у форматі: <name>: <phones>, birthday: <DD.MM.YYYY|-> 
@@ -22,6 +27,26 @@ HELP_TEXT = """\
   add-birthday <name> <DD.MM.YYYY>
       Приклад: add-birthday John 17.08.1980
       Результат: День народження було додано/оновлено.
+
+  add-address <name> <address>
+      Приклад: add-address John Kyiv, Lesi Ukrainky 12
+      Результат: Адресу додано. 
+
+  add-email <name> <email>
+      Приклад: add-email John john@example.com
+      Результат: Email додано.
+
+  email <email>
+      Приклад: email john@example.com
+      Результат: Показує контакт, що відповідає email.
+
+  name <name>
+      Приклад: name John
+      Результат: Показує контакт з вказаним ім'ям.
+
+  delete <name>
+      Приклад: delete John
+      Результат: Видаляє контакт з адресної книги.
 
   show-birthday <name>
       Приклад: show-birthday John
