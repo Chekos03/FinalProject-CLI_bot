@@ -75,11 +75,11 @@ def change_contact(args, book):
 @input_error
 def show_phone(args, book):
     if len(args) < 1:
-        return "Помилка: команда 'phone' очікує 1 аргумент: phone <ім'я>."
-    name = args[0]
-    record = book.find(name)
+        return "Помилка: команда 'phone' очікує 1 аргумент: phone <номер>."
+    phone = args[0]
+    record = book.find_record_by_phone(phone)
     if not record:
-        return 'Контакту не було знайдено.'
+        return f"Контакт з номером {phone} не знайдено."
     return f'Контакт знайдено {record}.'
 
 @input_error

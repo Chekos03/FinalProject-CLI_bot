@@ -16,9 +16,9 @@ HELP_TEXT = """\
           change John email old@example.com new@example.com
       Результат: Оновлення вибраного поля контакту (для phone/email потрібно вказати старе значення).
 
-  phone <name>
-      Приклад: phone John
-      Результат: <phones> Або: Контакт не знайдено.
+  phone <phone>
+      Приклад: phone 1234567890
+      Результат: Показує контакт, який містить цей номер телефону.
 
   all
       Результат: Усі контакти у форматі: <name>: <phones>, birthday: <DD.MM.YYYY|-> 
