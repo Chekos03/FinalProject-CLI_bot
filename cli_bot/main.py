@@ -71,38 +71,42 @@ def main():
     notes = NoteBook()
     print("Ласкаво просимо до асистента!")
 
-    while True:
-        user_input = input("Введіть команду: ")
-        command, args = parse_input(user_input)
+    try:
+        while True:
+            user_input = input("Введіть команду: ")
+            command, args = parse_input(user_input)
 
-        if not command:
-            continue
+            if not command:
+                continue
 
-        # завершення роботи
-        if command in ("close", "exit"):
-            print("До побачення!")
-            save_data(book)
-            break
+            # завершення роботи
+            if command in ("close", "exit"):
+                print("До побачення!")
+                save_data(book)
+                break
 
-        # спроба виконати введену команду
-        result = execute_command(command, args, book, notes)
+            # спроба виконати введену команду
+            result = execute_command(command, args, book, notes)
 
-        if result is not None:
-            print(result)
-            continue
+            if result is not None:
+                print(result)
+                continue
 
-        # якщо команда невірна – пробуємо підказати
-        suggestion = suggest_command(command)
-        if suggestion:
-            answer = input(f"Ви мали на увазі '{suggestion}'? (y/n): ").strip().lower()
-            if answer in ("y", "yes", "т", "так"):
-                result = execute_command(suggestion, args, book, notes)
-                if result is not None:
-                    print(result)
+            # якщо команда невірна – пробуємо підказати
+            suggestion = suggest_command(command)
+            if suggestion:
+                answer = input(f"Ви мали на увазі '{suggestion}'? (y/n): ").strip().lower()
+                if answer in ("y", "yes", "т", "так"):
+                    result = execute_command(suggestion, args, book, notes)
+                    if result is not None:
+                        print(result)
+                else:
+                    print(ERROR_MSG)
             else:
                 print(ERROR_MSG)
-        else:
-            print(ERROR_MSG)
+    except KeyboardInterrupt:
+        save_data(book)
+        
 
 
 if __name__ == "__main__":
