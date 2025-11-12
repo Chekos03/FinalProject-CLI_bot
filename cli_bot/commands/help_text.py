@@ -25,7 +25,11 @@ HELP_TEXT = """\
 
   add-address <name> <address>
       Приклад: add-address John Kyiv, Lesi Ukrainky 12
-      Результат: Адресу збережено для контакту.
+      Результат: Адресу додано. 
+
+  add-email <name> <email>
+      Приклад: add-email John john@example.com
+      Результат: Email додано.
 
   show-birthday <name>
       Приклад: show-birthday John

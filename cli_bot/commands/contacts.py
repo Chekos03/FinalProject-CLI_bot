@@ -1,5 +1,5 @@
 from .decorator import input_error
-from .address_book import AddressBook, Record,Birthday
+from .address_book import Record
 
 @input_error
 def add_contact(args, book):
@@ -81,6 +81,16 @@ def add_address(args, book):
     if not record:
         return 'Контакту не було знайдно.'
     return record.add_address(address)
+
+@input_error
+def add_email(args, book):
+    if len(args) < 2:
+        return "Помилка: команда 'add-email' очікує 2 аргументи: add-email <ім'я> <email>."
+    name, email = args[0], args[1]
+    record = book.find(name)
+    if not record:
+        return 'Контакту не було знайдно.'
+    return record.add_email(email)
 
 @input_error
 def birthdays(book):

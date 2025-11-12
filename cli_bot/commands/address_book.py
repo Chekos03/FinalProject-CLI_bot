@@ -1,5 +1,6 @@
 from collections import UserDict 
 from datetime import datetime,timedelta,date
+import re
 
 class Field:
     def __init__(self, value):
@@ -16,6 +17,16 @@ class Name(Field):
 class Address(Field):
     def __init__(self, address):
         super().__init__(address)
+
+
+class Email(Field):
+    EMAIL_PATTERN = re.compile(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
+
+    def __init__(self, email: str):
+        email = email.strip()
+        if not self.EMAIL_PATTERN.match(email):
+            raise ValueError("Некоректна адреса електронної пошти.")
+        super().__init__(email)
 
 
 class Phone(Field):
@@ -43,7 +54,8 @@ class Record:
         self.phones : list[Phone] = []
         self.birthday : Birthday = None
         self.address : Address = None
-        
+        self.emails : list[Email] = []
+
     def add_phone(self, phone):
         try:
             self.phones.append(Phone(phone))
@@ -83,12 +95,21 @@ class Record:
     def add_address(self, address: str):
         self.address = Address(address)
         return "Адресу додано."
+
+    def add_email(self, email: str):
+        try:
+            email_obj = Email(email)
+            self.emails.append(email_obj)
+            return "Email додано."
+        except ValueError as er:
+            return f"Невірний email: {er}"
     
     def __str__(self):
-        phones = '; '.join(phone.value for phone in self.phones) if self.phones else "Телефонів ще немає."
-        birthday = f', день народження: {self.birthday}' if self.birthday else ""
-        address = f', адреса: {self.address}' if self.address else ""
-        return f"Контакт: {self.name.value}, телефон: {phones}{birthday}{address}"
+        phones = '\n\tтелефони: ' + '; '.join(phone.value for phone in self.phones) if self.phones else "Телефонів ще немає."
+        birthday = f'\n\tдень народження: {self.birthday}' if self.birthday else ""
+        address = f'\n\tадреса: {self.address}' if self.address else ""
+        emails = f"\n\tімейли: {'; '.join(email.value for email in self.emails)}" if self.emails else ""
+        return f"Контакт: {self.name.value}{phones}{birthday}{address}{emails}"
     
     
 class Birthday(Field):
