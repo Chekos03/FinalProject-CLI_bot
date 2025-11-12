@@ -58,6 +58,8 @@ class Record:
 
     def add_phone(self, phone):
         try:
+            if self.find_phone(phone):
+                return "Такий номер вже існує у цьому контакті."
             self.phones.append(Phone(phone))
             return "Телефон додано."
         except ValueError as e:
@@ -73,6 +75,8 @@ class Record:
     def edit_phone(self,old_phone, new_phone):
         for p in self.phones:
             if p.value == old_phone:
+                if any(existing.value == new_phone and existing.value != old_phone for existing in self.phones):
+                    return f"Номер {new_phone} вже існує у цьому контакті."
                 try:
                     p.value = new_phone
                     return f'Старий номер : {old_phone} був змінений на {new_phone}.'
@@ -84,6 +88,13 @@ class Record:
         for p in self.phones:
             if p.value == phone:
                 return p
+        return None
+
+    def find_email(self, email: str):
+        target = email.strip().casefold()
+        for em in self.emails:
+            if em.value.casefold() == target:
+                return em
         return None
     
     def add_birthday(self,birthday:str):
@@ -115,6 +126,8 @@ class Record:
         return success_message
 
     def add_email(self, email: str):
+        if self.find_email(email):
+            return "Такий email вже існує у цьому контакті."
         try:
             email_obj = Email(email)
             self.emails.append(email_obj)
@@ -137,8 +150,15 @@ class Record:
         return f"Ім'я контакту змінено на {new_name}."
 
     def edit_email(self, old_email: str, new_email: str):
+        normalized_old = old_email.strip().casefold()
+        normalized_new = new_email.strip().casefold()
         for idx, email in enumerate(self.emails):
-            if email.value == old_email:
+            if email.value.casefold() == normalized_old:
+                if any(
+                    existing.value.casefold() == normalized_new and i != idx
+                    for i, existing in enumerate(self.emails)
+                ):
+                    return f"Email {new_email} вже існує у цьому контакті."
                 try:
                     self.emails[idx] = Email(new_email)
                     return f"Email {old_email} змінено на {new_email}."
@@ -171,6 +191,20 @@ class AddressBook(UserDict):
     
     def find(self, name):
         return self.data.get(name)
+
+    def find_record_by_phone(self, phone: str):
+        for record in self.data.values():
+            if record.find_phone(phone):
+                return record
+        return None
+
+    def find_record_by_email(self, email: str):
+        target = email.strip().casefold()
+        for record in self.data.values():
+            for em in record.emails:
+                if em.value.casefold() == target:
+                    return record
+        return None
     
     def delete(self, name):
         if name in self.data:

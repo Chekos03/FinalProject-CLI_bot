@@ -8,7 +8,10 @@ def add_contact(args, book):
     
     name, phone = args[0], args[1]
     record = book.find(name)
-
+    existing_owner = book.find_record_by_phone(phone)
+    if existing_owner and (record is None or existing_owner.name.value != record.name.value):
+        return f"Номер {phone} вже використовується контактом '{existing_owner.name.value}'."
+    
     if not record:
         record = Record(name)
         book.add_record(record)
@@ -41,12 +44,20 @@ def change_contact(args, book):
     if subcommand == "phone":
         if len(params) < 2:
             return "Формат: change <ім'я> phone <старий_номер> <новий_номер>."
-        return record.edit_phone(params[0], params[1])
+        old_phone, new_phone = params[0], params[1]
+        owner = book.find_record_by_phone(new_phone)
+        if owner and owner.name.value != record.name.value:
+            return f"Номер {new_phone} вже використовується контактом '{owner.name.value}'."
+        return record.edit_phone(old_phone, new_phone)
 
     if subcommand == "email":
         if len(params) < 2:
             return "Формат: change <ім'я> email <старий_email> <новий_email>."
-        return record.edit_email(params[0], params[1])
+        old_email, new_email = params[0], params[1]
+        owner = book.find_record_by_email(new_email)
+        if owner and owner.name.value != record.name.value:
+            return f"Email {new_email} вже використовується контактом '{owner.name.value}'."
+        return record.edit_email(old_email, new_email)
 
     if subcommand == "address":
         if not params:
@@ -119,6 +130,9 @@ def add_email(args, book):
     record = book.find(name)
     if not record:
         return 'Контакту не було знайдно.'
+    owner = book.find_record_by_email(email)
+    if owner and owner.name.value != record.name.value:
+        return f"Email {email} вже використовується контактом '{owner.name.value}'."
     return record.add_email(email)
 
 @input_error
