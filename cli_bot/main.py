@@ -3,7 +3,7 @@ from commands import (
     add_birthday, show_birthday, birthdays, birthdays_in, add_address, add_email, delete_contact, find_by_email, find_by_name,
     add_note, show_notes, find_note, edit_note, delete_note,
     add_tags_to_note, find_note_by_tags, sort_notes_by_tags,
-    parse_input, save_data, load_data, NoteBook, help_text
+    parse_input, save_data, load_data, help_text
 )
 
 from difflib import get_close_matches
@@ -47,7 +47,7 @@ def suggest_command(user_cmd: str):
 def execute_command(command: str, args: list[str], book, notes):
     """Виконує команду і повертає текст для виводу, або None, якщо команда невідома."""
     if command == "hello":
-        return "How can I help you?"
+        return "Як я можу допомогти?"
     elif command == "add":
         return add_contact(args, book)
     elif command == "change":

@@ -2,10 +2,6 @@ from .decorator import input_error
 from .note_book import Note
 
 
-from .decorator import input_error
-from .note_book import Note
-
-
 @input_error
 def add_note(args, notes):
     if len(args) < 2:
