@@ -1,3 +1,4 @@
-cli_bot/data/
+**/*.pkl
 **/__pycache__/
 **/.DS_Store
+
