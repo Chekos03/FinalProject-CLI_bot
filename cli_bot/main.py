@@ -40,12 +40,10 @@ COMMANDS = (
 
 
 def suggest_command(user_cmd: str):
-    """Повертає найбільш схожу команду або None."""
     matches = get_close_matches(user_cmd, COMMANDS, n=1, cutoff=0.6)
     return matches[0] if matches else None
 
 def execute_command(command: str, args: list[str], book, notes):
-    """Виконує команду і повертає текст для виводу, або None, якщо команда невідома."""
     if command == "hello":
         return "Як я можу допомогти?"
     elif command == "add":
@@ -107,20 +105,17 @@ def main():
             if not command:
                 continue
 
-            # завершення роботи
             if command in ("close", "exit"):
                 print("До побачення!")
                 save_data(book, notes)
                 break
 
-            # спроба виконати введену команду
             result = execute_command(command, args, book, notes)
 
             if result is not None:
                 print(result)
                 continue
 
-            # якщо команда невірна – пробуємо підказати
             suggestion = suggest_command(command)
             if suggestion:
                 answer = input(f"Ви мали на увазі '{suggestion}'? (y/n): ").strip().lower()
