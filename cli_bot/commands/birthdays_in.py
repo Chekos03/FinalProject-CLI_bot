@@ -3,10 +3,6 @@ from .decorator import input_error
 
 
 def _days_word(n: int) -> str:
-    """
-    Повертає правильну форму слова 'день' для вказаної кількості:
-    1 день, 2–4 дні, 5+ днів (з урахуванням 11–19).
-    """
     n = abs(n)
     last_two = n % 100
     last = n % 10
@@ -22,12 +18,6 @@ def _days_word(n: int) -> str:
 
 @input_error
 def birthdays_in(args, book):
-    """
-    Команда: birthdays-in <кількість_днів>
-
-    Повертає список контактів, у яких день народження
-    через задану кількість днів від сьогодні.
-    """
     if len(args) != 1:
         return (
             "Помилка: команда 'birthdays-in' очікує рівно 1 аргумент:\n"
@@ -36,7 +26,6 @@ def birthdays_in(args, book):
 
     days_str = args[0]
 
-    # Перевірка, що аргумент — ціле число
     try:
         days = int(days_str)
     except ValueError:
@@ -50,16 +39,13 @@ def birthdays_in(args, book):
 
     matches = []
 
-    # book — це AddressBook (UserDict), як і в інших командах
     for record in book.data.values():
         birthday_field = getattr(record, "birthday", None)
         if not birthday_field:
             continue
 
-        # Дата народження (без року)
-        bday = birthday_field.value  # datetime.date
+        bday = birthday_field.value  
 
-        # Наступний день народження для цього контакту
         next_bday = bday.replace(year=today.year)
         if next_bday < today:
             next_bday = next_bday.replace(year=today.year + 1)
