@@ -1,4 +1,15 @@
 **/*.pkl
+
 **/__pycache__/
+*.py[cod]
+
 **/.DS_Store
+
+venv/
+.venv/
+env/
+ENV/
+
+.vscode/
+.idea/
 
