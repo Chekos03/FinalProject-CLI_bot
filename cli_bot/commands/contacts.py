@@ -96,7 +96,7 @@ def add_birthday(args, book):
     name, birth_date = args[0], args[1]
     record = book.find(name)
     if not record:
-        return 'Контакту не було знайдно.'
+        return 'Контакт не було знайдено.'
     return record.add_birthday(birth_date)
 
 @input_error
@@ -108,7 +108,7 @@ def show_birthday(args,book):
     if not record:
         return 'Контакту не існує.'
     if not record.birthday:
-        return 'Не контакті не вказано день народження.'
+        return 'Для цього контакту не вказано день народження.'
     return f"{name}: {record.birthday}"
 
 @input_error
@@ -119,7 +119,7 @@ def add_address(args, book):
     address = " ".join(args[1:])
     record = book.find(name)
     if not record:
-        return 'Контакту не було знайдно.'
+        return 'Контакту не було знайдено.'
     return record.add_address(address)
 
 @input_error
@@ -129,7 +129,7 @@ def add_email(args, book):
     name, email = args[0], args[1]
     record = book.find(name)
     if not record:
-        return 'Контакту не було знайдно.'
+        return 'Контакту не було знайдено.'
     owner = book.find_record_by_email(email)
     if owner and owner.name.value != record.name.value:
         return f"Email {email} вже використовується контактом '{owner.name.value}'."

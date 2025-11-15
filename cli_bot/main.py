@@ -1,21 +1,15 @@
-try:
-    from .commands import (
-        add_contact, change_contact, show_phone, show_all,
-        add_birthday, show_birthday, birthdays, birthdays_in, add_address, add_email, delete_contact, find_by_email, find_by_name,
-        add_note, show_notes, find_note, edit_note, delete_note,
-        add_tags_to_note, find_note_by_tags, sort_notes_by_tags,
-        parse_input, save_data, load_data, help_text
-    )
-except ImportError:  # pragma: no cover - fallback for script execution
-    from commands import (  # type: ignore
-        add_contact, change_contact, show_phone, show_all,
-        add_birthday, show_birthday, birthdays, birthdays_in, add_address, add_email, delete_contact, find_by_email, find_by_name,
-        add_note, show_notes, find_note, edit_note, delete_note,
-        add_tags_to_note, find_note_by_tags, sort_notes_by_tags,
-        parse_input, save_data, load_data, help_text
-    )
+from commands import (
+    add_contact, change_contact, show_phone, show_all,
+    add_birthday, show_birthday, birthdays, birthdays_in, add_address, add_email, delete_contact, find_by_email, find_by_name,
+    add_note, show_notes, find_note, edit_note, delete_note,
+    add_tags_to_note, find_note_by_tags, sort_notes_by_tags,
+    parse_input, save_data, load_data, help_text
+)
 
 from difflib import get_close_matches
+
+from colorama import init, Fore, Style
+init (autoreset=True)
 
 ERROR_MSG = "Команда не існує. Введіть 'help' для ознайомлення."
 
@@ -102,27 +96,50 @@ def execute_command(command: str, args: list[str], book, notes):
     else:
         return None
 
+def print_colored(message, color=Fore.GREEN):
+    print (color+str(message))
+   
 def main():
     book , notes = load_data()
-    print("Ласкаво просимо до асистента!")
+    print_colored("Ласкаво просимо до асистента!", Fore.GREEN)
 
     try:
         while True:
-            user_input = input("Введіть команду: ")
+            user_input = input(Fore.CYAN+"Введіть команду: "+Style.RESET_ALL)
             command, args = parse_input(user_input)
 
             if not command:
                 continue
 
             if command in ("close", "exit"):
-                print("До побачення!")
+                print_colored("До побачення!", Fore.GREEN)
                 save_data(book, notes)
                 break
 
             result = execute_command(command, args, book, notes)
 
             if result is not None:
-                print(result)
+                error_keys = [
+                    "Помилка:", 
+                    "Невірний номер", 
+                    "очікує", 
+                    "вже існує",
+                    "не існує", 
+                    "не знайдено",
+                    "вже вказано",
+                    "help для ознайомлення", 
+                    "невірно", 
+                    "Некоректна",
+                    "Невірний email",
+                    "не може бути"
+                    "поточним",
+                    "Некоректна",
+                    "має бути"                    
+                ]
+                if any(key in str(result) for key in error_keys):
+                    print_colored(result, Fore.RED)
+                else:
+                    print_colored(result, Fore.YELLOW)
                 continue
 
             suggestion = suggest_command(command)
@@ -133,9 +150,9 @@ def main():
                     if result is not None:
                         print(result)
                 else:
-                    print(ERROR_MSG)
+                    print_colored(ERROR_MSG,Fore.RED)
             else:
-                print(ERROR_MSG)
+                print_colored(ERROR_MSG,Fore.RED)
     except KeyboardInterrupt:
         save_data(book, notes)
         
@@ -143,5 +160,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
