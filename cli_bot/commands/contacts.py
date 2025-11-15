@@ -1,7 +1,6 @@
 from .decorator import input_error
 from .address_book import Record
 
-@input_error
 def add_contact(args, book):
     if len(args) < 2:
         return "Помилка: команда 'add' очікує 2 аргументи: add <ім'я> <телефон>."
@@ -9,20 +8,25 @@ def add_contact(args, book):
     name, phone = args[0], args[1]
     record = book.find(name)
     existing_owner = book.find_record_by_phone(phone)
+
     if existing_owner and (record is None or existing_owner.name.value != record.name.value):
         return f"Номер {phone} вже використовується контактом '{existing_owner.name.value}'."
-    
+
+    # Новий контакт
     if not record:
-        record = Record(name)
-        book.add_record(record)
-        msg = "Контакт додано."
-    else:
-        msg = "Контакт оновлено."
-    
+        temp_record = Record(name)
+        phone_result = temp_record.add_phone(phone)
+        if "Невірний номер" in phone_result:
+            return phone_result           # нічого не зберігаємо
+        book.add_record(temp_record)
+        return f"Контакт додано. {phone_result}"
+
+    # Існуючий контакт
     phone_result = record.add_phone(phone)
     if "Невірний номер" in phone_result:
         return phone_result
-    return f"{msg} {phone_result}"
+
+    return f"Контакт оновлено. {phone_result}"
 
 @input_error
 def change_contact(args, book):

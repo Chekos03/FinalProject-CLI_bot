@@ -1,6 +1,6 @@
 from collections import UserDict
 from datetime import datetime
-
+from colorama import Fore, Style
 
 
 class Note:
@@ -16,13 +16,23 @@ class Note:
             self.tags.add(tag.lower())
 
     def __str__(self):
-        tags_display = f"Теги: #{' #'.join(self.tags)}" if self.tags else "Теги: немає"
+        title_colored = Fore.MAGENTA + Style.BRIGHT + self.title + Style.RESET_ALL
+        text = self.text
+        created = Fore.MAGENTA + self.created_at.strftime('%d.%m.%Y %H:%M') + Style.RESET_ALL
+        
+        if self.tags:
+            tags_colored = " ".join(
+                Fore.LIGHTMAGENTA_EX + f"#{t}" + Style.RESET_ALL for t in sorted(self.tags)
+            )
+            tags_line = f"Теги: {tags_colored}"
+        else:
+            tags_line = "Теги: немає."
         return (
-            f"{self.title}\n"
-            f"{self.text}\n"
-            f"Створено: {self.created_at.strftime('%d.%m.%Y %H:%M')}\n"
-            f"{tags_display}" 
-        )
+            f"{title_colored}\n"
+            f"{text}\n"
+            f"Створено: {created}\n"
+            f"{tags_line}"
+    )
 
 class NoteBook(UserDict):
     def add(self, note : Note):

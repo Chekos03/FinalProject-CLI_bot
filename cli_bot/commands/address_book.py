@@ -1,6 +1,7 @@
 from collections import UserDict 
-from datetime import datetime,timedelta,date
+from datetime import datetime, timedelta, date
 import re
+from colorama import Fore, Style
 
 class Field:
     def __init__(self, value):
@@ -110,7 +111,7 @@ class Record:
             self.birthday = Birthday(birthday)
             return success_message
         except ValueError as er:
-            return f"Не вірний формат дати {er}"
+            return str(er)
 
     def add_address(self, address: str):
         return self._set_address(address, "Адресу додано.")
@@ -167,11 +168,38 @@ class Record:
         return f"Email {old_email} не знайдено."
     
     def __str__(self):
-        phones = '\n\tтелефони: ' + '; '.join(phone.value for phone in self.phones) if self.phones else "Телефонів ще немає."
-        birthday = f'\n\tдень народження: {self.birthday}' if self.birthday else ""
-        address = f'\n\tадреса: {self.address}' if self.address else ""
-        emails = f"\n\tімейли: {'; '.join(email.value for email in self.emails)}" if self.emails else ""
-        return f"Контакт: {self.name.value}{phones}{birthday}{address}{emails}"
+    # Ім'я
+        name_colored = Fore.MAGENTA + self.name.value + Style.RESET_ALL
+
+        # Телефони
+        if self.phones:
+            phones = Fore.MAGENTA + '; '.join(phone.value for phone in self.phones) + Style.RESET_ALL
+            phones = f"\n\tтелефони: {phones}"
+        else:
+            phones = ""
+
+        # День народження
+        if self.birthday:
+            birthday = Fore.MAGENTA + str(self.birthday) + Style.RESET_ALL
+            birthday = f"\n\tдень народження: {birthday}"
+        else:
+            birthday = ""
+
+        # Адреса
+        if self.address:
+            address = Fore.MAGENTA + str(self.address) + Style.RESET_ALL
+            address = f"\n\tадреса: {address}"
+        else:
+            address = ""
+
+        # Emails
+        if self.emails:
+            emails = Fore.MAGENTA + '; '.join(email.value for email in self.emails) + Style.RESET_ALL
+            emails = f"\n\tімейли: {emails}"
+        else:
+            emails = ""
+
+        return f"Контакт: {name_colored}{phones}{birthday}{address}{emails}"
     
     
 class Birthday(Field):
@@ -181,6 +209,7 @@ class Birthday(Field):
             super().__init__(birthday_date)
         except ValueError:
             raise ValueError("Невірний формат дати. Використовуйте DD.MM.YYYY")
+    
     def __str__(self):
         return self.value.strftime("%d.%m.%Y")
 
