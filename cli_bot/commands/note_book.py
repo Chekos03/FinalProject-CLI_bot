@@ -37,12 +37,12 @@ class NoteBook(UserDict):
         return f"Нотатку '{title}' оновлено."
     
     def add_tags(self, title, tags):
-        note = self.data.get(title)
+        key = title.lower()
+        note = self.data.get(key)
         if note:
             note.add_tags(tags)
             return f"До нотатки '{title}' додано теги: {', '.join(tags)}"
         return f"Помилка: Нотатка з назвою '{title}' не знайдена."
-
 
     def find_by_tags(self, tags_query):
         search_tags = {tag.strip().lower() for tag in tags_query.replace(',', ' ').split()}
