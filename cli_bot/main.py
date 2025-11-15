@@ -1,10 +1,19 @@
-from commands import (
-    add_contact, change_contact, show_phone, show_all,
-    add_birthday, show_birthday, birthdays, birthdays_in, add_address, add_email, delete_contact, find_by_email, find_by_name,
-    add_note, show_notes, find_note, edit_note, delete_note,
-    add_tags_to_note, find_note_by_tags, sort_notes_by_tags,
-    parse_input, save_data, load_data, help_text
-)
+try:
+    from commands import (
+        add_contact, change_contact, show_phone, show_all,
+        add_birthday, show_birthday, birthdays, birthdays_in, add_address, add_email, delete_contact, find_by_email, find_by_name,
+        add_note, show_notes, find_note, edit_note, delete_note,
+        add_tags_to_note, find_note_by_tags, sort_notes_by_tags,
+        parse_input, save_data, load_data, help_text
+    )
+except ImportError:  # pragma: no cover - fallback for script execution
+    from commands import (  # type: ignore
+        add_contact, change_contact, show_phone, show_all,
+        add_birthday, show_birthday, birthdays, birthdays_in, add_address, add_email, delete_contact, find_by_email, find_by_name,
+        add_note, show_notes, find_note, edit_note, delete_note,
+        add_tags_to_note, find_note_by_tags, sort_notes_by_tags,
+        parse_input, save_data, load_data, help_text
+    )
 
 from difflib import get_close_matches
 
