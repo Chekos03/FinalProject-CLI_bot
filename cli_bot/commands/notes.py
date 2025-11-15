@@ -52,32 +52,25 @@ def add_tags_to_note(args, notes):
     title = args[0]
     tags = args[1:]
     
-    # Викликаємо новий метод класу NoteBook
     return notes.add_tags(title, tags)
 
-# Додайте цю нову функцію до cli_bot/commands/notes.py
 
 @input_error
 def find_note_by_tags(args, notes):
     if len(args) < 1:
         return "Помилка: команда 'find-by-tag' очікує 1 аргумент: find-by-tag <тег1,тег2,...>"
         
-    # Парсер може передати теги одним рядком або списком,
-    # ми припускаємо, що теги йдуть як елементи args.
     tags_query = " ".join(args) 
 
-    # Викликаємо новий метод класу NoteBook
     results = notes.find_by_tags(tags_query)
     
     return "\n\n".join(str(r) for r in results) if results else "Нотаток з цими тегами не знайдено."
 
-# Додайте цю нову функцію до cli_bot/commands/notes.py
 
 def sort_notes_by_tags(notes):
     if not notes.data:
         return "Немає збережених нотаток для сортування."
         
-    # Викликаємо новий метод класу NoteBook
     sorted_notes = notes.sort_by_tags()
     
     return "Нотатки відсортовані за тегами:\n\n" + "\n\n".join(str(n) for n in sorted_notes)

@@ -1,10 +1,19 @@
-from commands import (
-    add_contact, change_contact, show_phone, show_all,
-    add_birthday, show_birthday, birthdays, birthdays_in, add_address, add_email, delete_contact, find_by_email, find_by_name,
-    add_note, show_notes, find_note, edit_note, delete_note,
-    add_tags_to_note, find_note_by_tags, sort_notes_by_tags,
-    parse_input, save_data, load_data, help_text
-)
+try:
+    from .commands import (
+        add_contact, change_contact, show_phone, show_all,
+        add_birthday, show_birthday, birthdays, birthdays_in, add_address, add_email, delete_contact, find_by_email, find_by_name,
+        add_note, show_notes, find_note, edit_note, delete_note,
+        add_tags_to_note, find_note_by_tags, sort_notes_by_tags,
+        parse_input, save_data, load_data, help_text
+    )
+except ImportError:  # pragma: no cover - fallback for script execution
+    from commands import (  # type: ignore
+        add_contact, change_contact, show_phone, show_all,
+        add_birthday, show_birthday, birthdays, birthdays_in, add_address, add_email, delete_contact, find_by_email, find_by_name,
+        add_note, show_notes, find_note, edit_note, delete_note,
+        add_tags_to_note, find_note_by_tags, sort_notes_by_tags,
+        parse_input, save_data, load_data, help_text
+    )
 
 from difflib import get_close_matches
 
@@ -40,12 +49,10 @@ COMMANDS = (
 
 
 def suggest_command(user_cmd: str):
-    """Повертає найбільш схожу команду або None."""
     matches = get_close_matches(user_cmd, COMMANDS, n=1, cutoff=0.6)
     return matches[0] if matches else None
 
 def execute_command(command: str, args: list[str], book, notes):
-    """Виконує команду і повертає текст для виводу, або None, якщо команда невідома."""
     if command == "hello":
         return "Як я можу допомогти?"
     elif command == "add":
@@ -107,20 +114,17 @@ def main():
             if not command:
                 continue
 
-            # завершення роботи
             if command in ("close", "exit"):
                 print("До побачення!")
                 save_data(book, notes)
                 break
 
-            # спроба виконати введену команду
             result = execute_command(command, args, book, notes)
 
             if result is not None:
                 print(result)
                 continue
 
-            # якщо команда невірна – пробуємо підказати
             suggestion = suggest_command(command)
             if suggestion:
                 answer = input(f"Ви мали на увазі '{suggestion}'? (y/n): ").strip().lower()
@@ -139,6 +143,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 
