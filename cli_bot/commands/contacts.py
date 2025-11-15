@@ -12,16 +12,14 @@ def add_contact(args, book):
     if existing_owner and (record is None or existing_owner.name.value != record.name.value):
         return f"Номер {phone} вже використовується контактом '{existing_owner.name.value}'."
 
-    # Новий контакт
     if not record:
         temp_record = Record(name)
         phone_result = temp_record.add_phone(phone)
         if "Невірний номер" in phone_result:
-            return phone_result           # нічого не зберігаємо
+            return phone_result         
         book.add_record(temp_record)
         return f"Контакт додано. {phone_result}"
 
-    # Існуючий контакт
     phone_result = record.add_phone(phone)
     if "Невірний номер" in phone_result:
         return phone_result

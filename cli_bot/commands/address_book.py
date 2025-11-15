@@ -168,31 +168,26 @@ class Record:
         return f"Email {old_email} не знайдено."
     
     def __str__(self):
-    # Ім'я
         name_colored = Fore.MAGENTA + self.name.value + Style.RESET_ALL
 
-        # Телефони
         if self.phones:
             phones = Fore.MAGENTA + '; '.join(phone.value for phone in self.phones) + Style.RESET_ALL
             phones = f"\n\tтелефони: {phones}"
         else:
             phones = ""
 
-        # День народження
         if self.birthday:
             birthday = Fore.MAGENTA + str(self.birthday) + Style.RESET_ALL
             birthday = f"\n\tдень народження: {birthday}"
         else:
             birthday = ""
 
-        # Адреса
         if self.address:
             address = Fore.MAGENTA + str(self.address) + Style.RESET_ALL
             address = f"\n\tадреса: {address}"
         else:
             address = ""
 
-        # Emails
         if self.emails:
             emails = Fore.MAGENTA + '; '.join(email.value for email in self.emails) + Style.RESET_ALL
             emails = f"\n\tімейли: {emails}"
